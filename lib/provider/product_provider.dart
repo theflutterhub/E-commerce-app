@@ -25,10 +25,11 @@ class ProductProvider with ChangeNotifier {
       (element) {
         if (currentUser.uid == element.data()["UserId"]) {
           userModel = UserModel(
+            userImage: element.data()["UserImage"],
               userEmail: element.data()["UserEmail"],
               userGender: element.data()["UserGender"],
               userName: element.data()["UserName"],
-              userPhoneNumber: element.data()["Phone Number"]);
+              userPhoneNumber: element.data()["UserNumber"]);
           newList.add(userModel);
         }
         userModelList = newList;

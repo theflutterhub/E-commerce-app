@@ -1,14 +1,15 @@
-import 'package:e_commerce/projectscreen/youtubeui.dart';
 import 'package:e_commerce/provider/category_provider.dart';
 import 'package:e_commerce/provider/product_provider.dart';
 import 'package:e_commerce/screens/homepage.dart';
-import 'package:e_commerce/screens/profilescreen.dart';
+import 'package:e_commerce/screens/login.dart';
+
+import 'package:e_commerce/screens/welcomescreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'screens/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,15 +29,21 @@ class MyApp extends StatelessWidget {
           create: (context) => ProductProvider(),
         ),
       ],
-      child: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          return MaterialApp(
-            theme: ThemeData(iconTheme: IconThemeData(color: Colors.black)),
-            debugShowCheckedModeBanner: false,
-            home: snapshot.hasData ? HomePage() : Login(),
-          );
-        },
+      child: MaterialApp(
+        theme: ThemeData(iconTheme: IconThemeData(color: Colors.black)),
+        debugShowCheckedModeBanner: false,
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return WelcomeScreen();
+            } else if (snapshot.hasData) {
+              return HomePage();
+            } else {
+              return Login();
+            }
+          },
+        ),
       ),
     );
   }

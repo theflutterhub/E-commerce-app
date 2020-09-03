@@ -17,23 +17,53 @@ String p =
     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
 RegExp regExp = new RegExp(p);
-String email;
-String password;
+final TextEditingController email = TextEditingController();
+final TextEditingController userName = TextEditingController();
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+final TextEditingController password = TextEditingController();
+
 void vaildation() async {
-  final FormState _form = _formKey.currentState;
-  if (!_form.validate()) {
-    try {
-      UserCredential result = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      print(result.user.uid);
-    } on PlatformException catch (e) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text(e.message),
-      ));
-    }
+  if (email.text.isEmpty && password.text.isEmpty) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text("Both Flied Are Empty"),
+      ),
+    );
+  } else if (email.text.isEmpty) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text("Email Is Empty"),
+      ),
+    );
+  } else if (!regExp.hasMatch(email.text)) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text("Please Try Vaild Email"),
+      ),
+    );
+  } else if (password.text.isEmpty) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text("Password Is Empty"),
+      ),
+    );
+  } else if (password.text.length < 8) {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        content: Text("Password  Is Too Short"),
+      ),
+    );
   } else {
-    print("No");
+    try {
+  UserCredential result = await FirebaseAuth.instance
+      .signInWithEmailAndPassword(
+          email: email.text, password: password.text);
+  print(result.user.uid);
+} on PlatformException catch (e) {
+  _scaffoldKey.currentState.showSnackBar(SnackBar(
+    content: Text(e.message),
+  ));
+}
   }
 }
 
@@ -53,37 +83,12 @@ class _LoginState extends State<Login> {
           ),
           MyTextFormField(
             name: "Email",
-            onChanged: (value) {
-              setState(() {
-                email = value;
-                print(email);
-              });
-            },
-            validator: (value) {
-              if (value == "") {
-                return "Please Fill Email";
-              } else if (!regExp.hasMatch(value)) {
-                return "Email Is Invaild";
-              }
-              return "";
-            },
+            controller: email,
           ),
           PasswordTextFormField(
             obserText: obserText,
-            onChanged: (value) {
-              setState(() {
-                password = value;
-              });
-            },
             name: "Password",
-            validator: (value) {
-              if (value == "") {
-                return "Please Fill Password";
-              } else if (value.length < 8) {
-                return "Password Is Too Short";
-              }
-              return "";
-            },
+            controller: password,
             onTap: () {
               FocusScope.of(context).unfocus();
               setState(() {

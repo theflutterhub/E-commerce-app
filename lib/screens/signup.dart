@@ -5,7 +5,6 @@ import 'package:e_commerce/widgets/mybutton.dart';
 import 'package:e_commerce/widgets/mytextformField.dart';
 import 'package:e_commerce/widgets/passwordtextformfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -21,25 +20,71 @@ String p =
 
 RegExp regExp = new RegExp(p);
 bool obserText = true;
-String email;
-String phoneNumber;
+final TextEditingController email = TextEditingController();
+final TextEditingController userName = TextEditingController();
+final TextEditingController phoneNumber = TextEditingController();
+final TextEditingController password = TextEditingController();
+
 bool isMale = true;
-String password;
-String userName;
 
 class _SignUpState extends State<SignUp> {
   void vaildation() async {
-    final FormState _form = _formKey.currentState;
-    if (!_form.validate()) {
+    if (userName.text.isEmpty &&
+        email.text.isEmpty &&
+        password.text.isEmpty &&
+        phoneNumber.text.isEmpty) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text("All Flied Are Empty"),
+        ),
+      );
+    } else if (userName.text.length < 6) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text("Name Must Be 6 "),
+        ),
+      );
+    } else if (email.text.isEmpty) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text("Email Is Empty"),
+        ),
+      );
+    } else if (!regExp.hasMatch(email.text)) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text("Please Try Vaild Email"),
+        ),
+      );
+    } else if (password.text.isEmpty) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text("Password Is Empty"),
+        ),
+      );
+    } else if (password.text.length < 8) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text("Password  Is Too Short"),
+        ),
+      );
+    } else if (phoneNumber.text.length < 11 || phoneNumber.text.length > 11) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text("Phone Number Must Be 11 "),
+        ),
+      );
+    } else {
       try {
         UserCredential result = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password);
+            .createUserWithEmailAndPassword(
+                email: email.text, password: password.text);
         FirebaseFirestore.instance.collection("User").doc(result.user.uid).set({
-          "UserName": userName,
+          "UserName": userName.text,
           "UserId": result.user.uid,
-          "UserEmail": email,
+          "UserEmail": email.text,
           "UserGender": isMale == true ? "Male" : "Female",
-          "Phone Number": phoneNumber,
+          "UserNumber": phoneNumber.text,
         });
       } on PlatformException catch (e) {
         _scaffoldKey.currentState.showSnackBar(
@@ -48,7 +93,7 @@ class _SignUpState extends State<SignUp> {
           ),
         );
       }
-    } else {}
+    }
   }
 
   Widget _buildAllTextFormField() {
@@ -61,53 +106,16 @@ class _SignUpState extends State<SignUp> {
           children: <Widget>[
             MyTextFormField(
               name: "UserName",
-              onChanged: (value) {
-                setState(() {
-                  userName = value;
-                });
-              },
-              validator: (value) {
-                if (value == "") {
-                  return "Please Fill UserName";
-                } else if (value.length < 6) {
-                  return "UserName Is Too Short";
-                }
-
-                return "";
-              },
+              controller: userName,
             ),
             MyTextFormField(
               name: "Email",
-              onChanged: (value) {
-                setState(() {
-                  email = value;
-                });
-              },
-              validator: (value) {
-                if (value == "") {
-                  return "Please Fill Email";
-                } else if (!regExp.hasMatch(value)) {
-                  return "Email Is Invaild";
-                }
-                return "";
-              },
+              controller: email,
             ),
             PasswordTextFormField(
               obserText: obserText,
+              controller: password,
               name: "Password",
-              onChanged: (value) {
-                setState(() {
-                  password = value;
-                });
-              },
-              validator: (value) {
-                if (value == "") {
-                  return "Please Fill Password";
-                } else if (value.length < 8) {
-                  return "Password Is Too Short";
-                }
-                return "";
-              },
               onTap: () {
                 FocusScope.of(context).unfocus();
                 setState(() {
@@ -141,19 +149,7 @@ class _SignUpState extends State<SignUp> {
             ),
             MyTextFormField(
               name: "Phone Number",
-              onChanged: (value) {
-                setState(() {
-                  phoneNumber = value;
-                });
-              },
-              validator: (value) {
-                if (value == "") {
-                  return "Please Fill Phone Number";
-                } else if (value.length < 11) {
-                  return "Phone Number Must Be 11";
-                }
-                return "";
-              },
+              controller: phoneNumber,
             ),
           ],
         ),
