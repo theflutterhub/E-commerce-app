@@ -13,7 +13,6 @@ class ProductProvider with ChangeNotifier {
   CartModel cartModel;
   List<CartModel> checkOutModelList = [];
   CartModel checkOutModel;
-  List<CartModel> myCheckOut;
   List<UserModel> userModelList = [];
   UserModel userModel;
   Future<void> getUserData() async {
@@ -25,7 +24,7 @@ class ProductProvider with ChangeNotifier {
       (element) {
         if (currentUser.uid == element.data()["UserId"]) {
           userModel = UserModel(
-            userImage: element.data()["UserImage"],
+              userImage: element.data()["UserImage"],
               userEmail: element.data()["UserEmail"],
               userGender: element.data()["UserGender"],
               userName: element.data()["UserName"],
@@ -39,6 +38,16 @@ class ProductProvider with ChangeNotifier {
 
   List<UserModel> get getUserModelList {
     return userModelList;
+  }
+
+  void deleteCartProduct(int index) {
+    cartModelList.removeAt(index);
+    notifyListeners();
+  }
+
+  void deleteCheckoutProduct(int index) {
+    checkOutModelList.removeAt(index);
+    notifyListeners();
   }
 
   void getCheckOutData({

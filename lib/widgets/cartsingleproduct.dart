@@ -5,10 +5,12 @@ import 'package:provider/provider.dart';
 class CartSingleProduct extends StatefulWidget {
   final String name;
   final String image;
+  final int index;
   final bool isCount;
   int quentity;
   final double price;
   CartSingleProduct({
+    this.index,
     this.isCount,
     this.quentity,
     this.image,
@@ -47,15 +49,33 @@ class _CartSingleProductState extends State<CartSingleProduct> {
                 ),
                 Container(
                   height: 140,
-                  width: 200,
+                  width: widget.isCount == true ? 244 : 270,
                   child: ListTile(
                     title: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
-                          widget.name,
-                          style: myStyle,
+                        Container(
+                          height: 30,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.name,
+                                style: myStyle,
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  widget.isCount == false
+                                      ? productProvider
+                                          .deleteCartProduct(widget.index)
+                                      : productProvider
+                                          .deleteCheckoutProduct(widget.index);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         Text(
                           "Cloths",

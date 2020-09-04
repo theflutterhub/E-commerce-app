@@ -93,6 +93,8 @@ class _CheckOutState extends State<CheckOut> {
                 itemCount: productProvider.getCheckOutModelListLength,
                 itemBuilder: (ctx, index) {
                   return CartSingleProduct(
+                    isCount: true,
+                    index: index,
                     image: productProvider.getCheckOutModelList[index].image,
                     name: productProvider.getCheckOutModelList[index].name,
                     price: productProvider.getCheckOutModelList[index].price,

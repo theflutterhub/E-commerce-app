@@ -70,7 +70,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       "UserImage":imageUrl,
     });
   }
-  //Make New User And Delete All Users in Firebase And Firestore OR FireBase Storage This Error Solved
 
   File _pickedImage;
 

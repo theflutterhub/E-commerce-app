@@ -17,8 +17,9 @@ class WhatsappUi extends StatelessWidget {
         trailing: Text(
           date,
           style: TextStyle(
-            fontSize:  green == true ? 16:14,
-              fontWeight: green == true ? FontWeight.bold : FontWeight.normal,
+              fontSize: green == true ? 16 : 14,
+              fontWeight:
+                  green == true ? FontWeight.bold : FontWeight.normal,
               color: green == true ? Color(0xff22c55c) : Colors.black),
         ),
       ),
