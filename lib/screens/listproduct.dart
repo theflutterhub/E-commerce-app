@@ -1,21 +1,39 @@
 import 'package:e_commerce/model/product.dart';
+import 'package:e_commerce/provider/category_provider.dart';
+import 'package:e_commerce/provider/product_provider.dart';
+
 import 'package:e_commerce/screens/homepage.dart';
+import 'package:e_commerce/screens/search_category.dart';
+import 'package:e_commerce/screens/search_product.dart';
+
 import 'package:e_commerce/widgets/singeproduct.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListProduct extends StatelessWidget {
   final String name;
+  bool isCategory = true;
   final List<Product> snapShot;
-  ListProduct({this.name, this.snapShot});
+  ListProduct({
+    this.name,
+    this.isCategory,
+    this.snapShot,
+  });
   @override
   Widget build(BuildContext context) {
-    final Orientation orientation=MediaQuery.of(context).orientation;
+    CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
+    final Orientation orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         leading: IconButton(
-            icon: Icon(Icons.arrow_back,color: Colors.black,),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -24,13 +42,27 @@ class ListProduct extends StatelessWidget {
               );
             }),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
+          isCategory == true
+              ? IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    categoryProvider.getSearchList(list: snapShot);
+                    showSearch(context: context, delegate: SearchCategory());
+                  },
+                )
+              : IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    productProvider.getSearchList(list: snapShot);
+                    showSearch(context: context, delegate: SearchProduct());
+                  },
+                ),
           IconButton(
             icon: Icon(
               Icons.notifications_none,
@@ -70,8 +102,9 @@ class ListProduct extends StatelessWidget {
                 Container(
                   height: 700,
                   child: GridView.count(
-                    crossAxisCount: orientation==Orientation.portrait?2:3,
-                    childAspectRatio:orientation==Orientation.portrait?0.7:0.9,
+                    crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
+                    childAspectRatio:
+                        orientation == Orientation.portrait ? 0.7 : 0.9,
                     scrollDirection: Axis.vertical,
                     children: snapShot
                         .map(

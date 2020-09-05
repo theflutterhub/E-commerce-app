@@ -24,6 +24,7 @@ class ProductProvider with ChangeNotifier {
       (element) {
         if (currentUser.uid == element.data()["UserId"]) {
           userModel = UserModel(
+              userAddress: element.data()["UserAddress"],
               userImage: element.data()["UserImage"],
               userEmail: element.data()["UserEmail"],
               userGender: element.data()["UserGender"],
@@ -34,6 +35,7 @@ class ProductProvider with ChangeNotifier {
         userModelList = newList;
       },
     );
+    notifyListeners();
   }
 
   List<UserModel> get getUserModelList {
@@ -47,6 +49,11 @@ class ProductProvider with ChangeNotifier {
 
   void deleteCheckoutProduct(int index) {
     checkOutModelList.removeAt(index);
+    notifyListeners();
+  }
+
+  void clearCheckoutProduct() {
+    checkOutModelList.clear();
     notifyListeners();
   }
 
@@ -199,5 +206,20 @@ class ProductProvider with ChangeNotifier {
 
   int get getNotificationIndex {
     return notificationList.length;
+  }
+
+
+
+  List<Product> searchList;
+  void getSearchList({List<Product> list}) {
+    searchList = list;
+  }
+
+  List<Product> searchProductList(String query) {
+    List<Product> searchShirt = searchList.where((element) {
+      return element.name.toUpperCase().contains(query) ||
+          element.name.toLowerCase().contains(query);
+    }).toList();
+    return searchShirt;
   }
 }

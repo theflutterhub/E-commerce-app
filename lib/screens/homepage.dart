@@ -1,6 +1,7 @@
 import 'package:e_commerce/model/categoryicon.dart';
 import 'package:e_commerce/model/usermodel.dart';
 import 'package:e_commerce/screens/profilescreen.dart';
+import 'package:e_commerce/screens/search_category.dart';
 
 import '../provider/product_provider.dart';
 import '../provider/category_provider.dart';
@@ -63,7 +64,9 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.black),
         ),
         currentAccountPicture: CircleAvatar(
-          backgroundImage: AssetImage("images/userImage.png"),
+          backgroundImage: e.userImage == null
+              ? AssetImage("images/userImage.png")
+              : NetworkImage(e.userImage),
         ),
         decoration: BoxDecoration(color: Color(0xfff2f2f2)),
         accountEmail: Text(e.userEmail, style: TextStyle(color: Colors.black)),
@@ -343,6 +346,7 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(
                     builder: (ctx) => ListProduct(
                       name: "Featured",
+                      isCategory: false,
                       snapShot: featureProduct,
                     ),
                   ),
@@ -426,6 +430,7 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                           builder: (ctx) => ListProduct(
                             name: "NewAchvies",
+                            isCategory: false,
                             snapShot: newAchivesProduct,
                           ),
                         ),
@@ -540,13 +545,6 @@ class _HomePageState extends State<HomePage> {
               _key.currentState.openDrawer();
             }),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
           NotificationButton(),
         ],
       ),

@@ -24,6 +24,7 @@ final TextEditingController email = TextEditingController();
 final TextEditingController userName = TextEditingController();
 final TextEditingController phoneNumber = TextEditingController();
 final TextEditingController password = TextEditingController();
+final TextEditingController address = TextEditingController();
 
 bool isMale = true;
 
@@ -32,7 +33,8 @@ class _SignUpState extends State<SignUp> {
     if (userName.text.isEmpty &&
         email.text.isEmpty &&
         password.text.isEmpty &&
-        phoneNumber.text.isEmpty) {
+        phoneNumber.text.isEmpty &&
+        address.text.isEmpty) {
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(
           content: Text("All Flied Are Empty"),
@@ -74,6 +76,12 @@ class _SignUpState extends State<SignUp> {
           content: Text("Phone Number Must Be 11 "),
         ),
       );
+    } else if (address.text.isEmpty) {
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text("Adress Is Empty "),
+        ),
+      );
     } else {
       try {
         UserCredential result = await FirebaseAuth.instance
@@ -83,6 +91,7 @@ class _SignUpState extends State<SignUp> {
           "UserName": userName.text,
           "UserId": result.user.uid,
           "UserEmail": email.text,
+          "UserAddress": address.text,
           "UserGender": isMale == true ? "Male" : "Female",
           "UserNumber": phoneNumber.text,
         });
@@ -151,6 +160,10 @@ class _SignUpState extends State<SignUp> {
               name: "Phone Number",
               controller: phoneNumber,
             ),
+            MyTextFormField(
+              name: "Address",
+              controller: address,
+            ),
           ],
         ),
       ),
@@ -159,7 +172,7 @@ class _SignUpState extends State<SignUp> {
 
   Widget _buildBottomPart() {
     return Container(
-      height: 460,
+      height: 500,
       margin: EdgeInsets.symmetric(horizontal: 10),
       width: double.infinity,
       child: Column(
@@ -200,7 +213,7 @@ class _SignUpState extends State<SignUp> {
             child: Column(
               children: <Widget>[
                 Container(
-                  height: 280,
+                  height: 240,
                   width: double.infinity,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,

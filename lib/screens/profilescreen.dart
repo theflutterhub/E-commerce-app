@@ -22,12 +22,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var _formKey = GlobalKey<FormState>();
 
   TextEditingController phoneNumber;
+  TextEditingController address;
   TextEditingController userName;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   static String p =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
   RegExp regExp = new RegExp(p);
+  void finalVaildation() async {
+    await _uploadImage(image: _pickedImage);
+    await userDetailUpdate();
+  }
 
   bool isMale = false;
   void vaildation() async {
@@ -56,19 +61,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       );
     } else {
-      _uploadImage(image: _pickedImage);
-      userDetailUpdate();
+      finalVaildation();
     }
   }
 
   ProductProvider productProvider;
-  void userDetailUpdate() {
+  Future<void> userDetailUpdate() {
     FirebaseFirestore.instance.collection("User").doc(user.uid).update({
       "UserName": userName.text,
       "UserGender": isMale == true ? "Male" : "Female",
       "UserNumber": phoneNumber.text,
-      "UserImage":imageUrl,
+      "UserImage": imageUrl,
+      "UserAddress": address.text
     });
+    return null;
   }
 
   File _pickedImage;
@@ -83,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   User user;
   String imageUrl;
-  void _uploadImage({File image}) async {
+  Future<void> _uploadImage({File image}) async {
     user = FirebaseAuth.instance.currentUser;
     StorageReference storageReference =
         FirebaseStorage.instance.ref().child("UserImage/${user.uid}");
@@ -114,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Text(
               endText,
               style: TextStyle(
-                fontSize: 17,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -123,13 +129,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-String userImage;
+
+  String userImage;
   bool edit = false;
   Widget _buildContainerPart() {
     List<UserModel> userModel = productProvider.userModelList;
     return Column(
       children: userModel.map((e) {
-        userImage=e.userImage;
+        userImage = e.userImage;
+        address = TextEditingController(text: e.userAddress);
         userName = TextEditingController(text: e.userName);
         phoneNumber = TextEditingController(text: e.userPhoneNumber);
         if (e.userGender == "Male") {
@@ -162,6 +170,10 @@ String userImage;
               _buildSingleContainer(
                 endText: e.userPhoneNumber,
                 startText: "Phone Number",
+              ),
+              _buildSingleContainer(
+                endText: e.userAddress,
+                startText: "Address",
               ),
             ],
           ),
@@ -228,6 +240,10 @@ String userImage;
               MyTextFormField(
                 name: "Phone Number",
                 controller: phoneNumber,
+              ),
+              MyTextFormField(
+                name: "Address",
+                controller: address,
               ),
             ],
           ),

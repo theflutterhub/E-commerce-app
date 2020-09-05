@@ -249,4 +249,17 @@ class CategoryProvider with ChangeNotifier {
   List<Product> get getTieList {
     return tie;
   }
+
+  List<Product> searchList;
+  void getSearchList({List<Product> list}) {
+    searchList = list;
+  }
+
+  List<Product> searchCategoryList(String query) {
+    List<Product> searchShirt = searchList.where((element) {
+      return element.name.toUpperCase().contains(query) ||
+          element.name.toLowerCase().contains(query);
+    }).toList();
+    return searchShirt;
+  }
 }
