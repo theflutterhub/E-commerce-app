@@ -1,11 +1,11 @@
-import 'package:e_commerce/projectscreen/messengerui.dart';
-import 'package:e_commerce/projectscreen/tiktokui.dart';
-import 'package:e_commerce/projectscreen/whatsappui.dart';
+
 import 'package:e_commerce/provider/category_provider.dart';
 import 'package:e_commerce/provider/product_provider.dart';
+
 import 'package:e_commerce/screens/homepage.dart';
 import 'package:e_commerce/screens/login.dart';
 import 'package:e_commerce/screens/welcomescreen.dart';
+import 'package:e_commerce/ui/snapchatui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
             }
           },
         ),
+
 
 
       ),

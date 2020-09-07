@@ -1,5 +1,8 @@
 import 'package:e_commerce/model/categoryicon.dart';
 import 'package:e_commerce/model/usermodel.dart';
+import 'package:e_commerce/screens/about.dart';
+import 'package:e_commerce/screens/cartscreen.dart';
+import 'package:e_commerce/screens/contactus.dart';
 import 'package:e_commerce/screens/profilescreen.dart';
 import 'package:e_commerce/screens/search_category.dart';
 
@@ -103,6 +106,8 @@ class _HomePageState extends State<HomePage> {
                 profileColor = false;
                 aboutColor = false;
               });
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (ctx) => CartScreen()));
             },
             leading: Icon(Icons.shopping_cart),
             title: Text("Cart"),
@@ -117,6 +122,8 @@ class _HomePageState extends State<HomePage> {
                 profileColor = false;
                 cartColor = false;
               });
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (ctx) => About()));
             },
             leading: Icon(Icons.info),
             title: Text("About"),
@@ -150,6 +157,8 @@ class _HomePageState extends State<HomePage> {
                 homeColor = false;
                 aboutColor = false;
               });
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (ctx) => ContactUs()));
             },
             leading: Icon(Icons.phone),
             title: Text("Contant Us"),

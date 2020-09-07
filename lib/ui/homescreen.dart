@@ -1,4 +1,4 @@
-import 'package:e_commerce/projectscreen/detailscreen.dart';
+import 'package:e_commerce/ui/detailscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 

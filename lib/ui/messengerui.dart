@@ -72,7 +72,14 @@ class MessengerUi extends StatelessWidget {
   }
 
   Widget _buildSingleMessage(
-      {String image, String title, String subTitle, String date}) {
+      {String image,
+      String title,
+      String subTitle,
+      String date,
+      bool online,
+      FontWeight fontWeight,
+      Color color,
+      bool notIcon}) {
     return Container(
       height: 70,
       margin: EdgeInsets.symmetric(horizontal: 5),
@@ -88,11 +95,24 @@ class MessengerUi extends StatelessWidget {
         ),
         subtitle: Row(
           children: [
-            Text(subTitle),
-            Text(date),
+            Text(
+              subTitle,
+              style: TextStyle(color: color, fontWeight: fontWeight),
+            ),
+            Text(
+              date,
+              style: TextStyle(color: color, fontWeight: fontWeight),
+            ),
           ],
         ),
-        trailing: Icon(Icons.check_circle),
+        trailing: notIcon == false
+            ? Icon(
+                online == true ? Icons.fiber_manual_record : Icons.check_circle,
+                color: online == true ? Colors.green : Colors.grey,
+              )
+            : Container(
+                width: 0,
+              ),
       ),
     );
   }
@@ -100,6 +120,52 @@ class MessengerUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xfff2f2f2),
+      bottomNavigationBar: Container(
+        height: 60,
+        child: Stack(
+          children: [
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(
+                    Icons.chat_bubble,
+                    size: 30,
+                  ),
+                  Icon(
+                    Icons.supervisor_account,
+                    color: Colors.grey,
+                    size: 30,
+                  ),
+                  Icon(
+                    Icons.play_circle_filled,
+                    color: Colors.grey,
+                    size: 30,
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              left: 103,
+              bottom: 29,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                maxRadius: 12,
+                child: CircleAvatar(
+                  backgroundColor: Colors.red[800],
+                  maxRadius: 9,
+                  child: Text(
+                    "3",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        color: Colors.white,
+      ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: Padding(
@@ -205,7 +271,7 @@ class MessengerUi extends StatelessWidget {
                         me: true,
                         color: Colors.grey[300],
                         image: "faisuprofile.jpeg"),
-                    _buildStory(color: Colors.yellow, image: "faisu.jpg"),
+                    _buildStory(color: Color(0xff0099ff), image: "faisu.jpg"),
                     _buildStory(color: Color(0xff0099ff), image: "laptop.png"),
                     _buildSingleStory(
                         color: Colors.grey[300], image: "camera.jpg"),
@@ -217,19 +283,62 @@ class MessengerUi extends StatelessWidget {
                 ),
               ),
             ),
-            _buildSingleMessage(
-              date: "now",
-              image: "faisu.jpg",
-              subTitle: "Subscribe My Channel-",
-              title: "Sabeel Baloch",
-            ),
-            _buildSingleMessage(),
-            _buildSingleMessage(),
-            _buildSingleMessage(),
-            _buildSingleMessage(),
-            _buildSingleMessage(),
-            _buildSingleMessage(),
-            _buildSingleMessage(),
+            Container(
+              height: 500,
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildSingleMessage(
+                    date: "now",
+                    notIcon: false,
+                    fontWeight: FontWeight.bold,
+                    image: "faisu.jpg",
+                    color: Colors.black,
+                    subTitle: "Subscribe My Channel-",
+                    title: "Assar Baloch",
+                  ),
+                  _buildSingleMessage(
+                    online: true,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    notIcon: false,
+                    date: "5m ago",
+                    image: "faisuprofile.jpeg",
+                    subTitle: "Like Comment and Share-",
+                    title: "Sabir Baloch",
+                  ),
+                  _buildSingleMessage(
+                    online: true,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    notIcon: false,
+                    date: "5 day",
+                    image: "laptop.png",
+                    subTitle: "Subscribe My Channel-",
+                    title: "Shakeel Baloch",
+                  ),
+                  _buildSingleMessage(
+                    date: "1 week",
+                    image: "man.jpg",
+                    subTitle: "Hii Sabir -",
+                    title: "Sabeel Baloch",
+                  ),
+                  _buildSingleMessage(
+                    date: "1 month",
+                    image: "manwatch.jpg",
+                    subTitle: "Any Work For Me-",
+                    title: "Khalil Baloch",
+                  ),
+                  _buildSingleMessage(
+                    date: "now",
+                    image: "camera.jpg",
+                    subTitle: "Subscribe My Channel-",
+                    title: "Faseel Baloch",
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

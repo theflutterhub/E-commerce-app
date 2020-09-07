@@ -1,4 +1,5 @@
 import 'package:e_commerce/screens/checkout.dart';
+import 'package:e_commerce/screens/homepage.dart';
 import 'package:e_commerce/widgets/cartsingleproduct.dart';
 import 'package:e_commerce/widgets/notification_button.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,10 @@ class _CartScreenState extends State<CartScreen> {
             Icons.arrow_back,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () {
+             Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (ctx) => HomePage()));
+          },
         ),
         actions: <Widget>[
           NotificationButton(),

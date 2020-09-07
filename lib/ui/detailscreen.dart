@@ -1,4 +1,4 @@
-import 'package:e_commerce/projectscreen/homescreen.dart';
+import 'package:e_commerce/ui/homescreen.dart';
 import 'package:flutter/material.dart';
 
 class Detail extends StatelessWidget {

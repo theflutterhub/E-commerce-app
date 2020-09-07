@@ -19,26 +19,26 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   int count = 1;
   ProductProvider productProvider;
-  Widget _buildSizeProduct({String name}) {
-    return Container(
-      height: 60,
-      width: 60,
-      color: Color(0xfff2f2f2),
-      child: Center(
-        child: Text(
-          name,
-          style: TextStyle(
-            fontSize: 17,
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget _buildSizeProduct({String name}) {
+  //   return Container(
+  //     height: 60,
+  //     width: 60,
+  //     color: Color(0xfff2f2f2),
+  //     child: Center(
+  //       child: Text(
+  //         name,
+  //         style: TextStyle(
+  //           fontSize: 17,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildColorProduct({Color color}) {
     return Container(
-      height: 60,
-      width: 60,
+      height: 40,
+      width: 40,
       color: color,
     );
   }
@@ -54,7 +54,7 @@ class _DetailScreenState extends State<DetailScreen> {
           child: Container(
             padding: EdgeInsets.all(13),
             child: Container(
-              height: 220,
+              height: 260,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
@@ -107,6 +107,8 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
+  List<bool> isSelected = [true, false, false, false];
+  List<bool> colored = [true, false, false, false];
   Widget _buildSizePart() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,18 +120,43 @@ class _DetailScreenState extends State<DetailScreen> {
         SizedBox(
           height: 15,
         ),
+        // Container(
+        //   width: 265,
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     children: <Widget>[
+        //       _buildSizeProduct(name: "S"),
+        //       _buildSizeProduct(name: "M"),
+        //       _buildSizeProduct(name: "L"),
+        //       _buildSizeProduct(name: "XL"),
+        //     ],
+        //   ),
+        // )
         Container(
           width: 265,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _buildSizeProduct(name: "S"),
-              _buildSizeProduct(name: "M"),
-              _buildSizeProduct(name: "L"),
-              _buildSizeProduct(name: "XXL"),
+          child: ToggleButtons(
+            children: [
+              Text("S"),
+              Text("M"),
+              Text("L"),
+              Text("XL"),
             ],
+            onPressed: (int index) {
+              setState(() {
+                for (int indexBtn = 0;
+                    indexBtn < isSelected.length;
+                    indexBtn++) {
+                  if (indexBtn == index) {
+                    isSelected[indexBtn] = true;
+                  } else {
+                    isSelected[indexBtn] = false;
+                  }
+                }
+              });
+            },
+            isSelected: isSelected,
           ),
-        )
+        ),
       ],
     );
   }
@@ -148,16 +175,41 @@ class _DetailScreenState extends State<DetailScreen> {
         SizedBox(
           height: 15,
         ),
+        // Container(
+        //   width: 265,
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //     children: <Widget>[
+        //       _buildColorProduct(color: Colors.blue[200]),
+        //       _buildColorProduct(color: Colors.green[200]),
+        //       _buildColorProduct(color: Colors.yellow[200]),
+        //       _buildColorProduct(color: Colors.cyan[300]),
+        //     ],
+        //   ),
+        // ),
         Container(
           width: 265,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
+          child: ToggleButtons(
+            fillColor: Color(0xff746bc9),
+            renderBorder: false,
+            children: [
               _buildColorProduct(color: Colors.blue[200]),
               _buildColorProduct(color: Colors.green[200]),
               _buildColorProduct(color: Colors.yellow[200]),
               _buildColorProduct(color: Colors.cyan[300]),
             ],
+            onPressed: (int index) {
+              setState(() {
+                for (int indexBtn = 0; indexBtn < colored.length; indexBtn++) {
+                  if (indexBtn == index) {
+                    colored[indexBtn] = true;
+                  } else {
+                    colored[indexBtn] = false;
+                  }
+                }
+              });
+            },
+            isSelected: colored,
           ),
         ),
       ],

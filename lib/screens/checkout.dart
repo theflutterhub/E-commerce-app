@@ -57,12 +57,13 @@ class _CheckOutState extends State<CheckOut> {
               FirebaseFirestore.instance.collection("Order").doc(user.uid).set({
                 "Product": productProvider.checkOutModelList
                     .map((c) => {
-                          "Product Name": c.name,
-                          "Product Price": c.price,
-                          "Product Quetity": c.quentity,
+                          "ProductName": c.name,
+                          "ProductPrice": c.price,
+                          "ProductQuetity": c.quentity,
+                          "ProductImage":c.image,
                         })
                     .toList(),
-                "Total Price": total.toStringAsFixed(2),
+                "TotalPrice": total.toStringAsFixed(2),
                 "UserName": e.userName,
                 "UserEmail": e.userEmail,
                 "UserNumber": e.userPhoneNumber,

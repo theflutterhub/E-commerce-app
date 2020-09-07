@@ -1,6 +1,7 @@
 import 'package:e_commerce/model/product.dart';
 import 'package:e_commerce/provider/category_provider.dart';
 import 'package:e_commerce/provider/product_provider.dart';
+import 'package:e_commerce/screens/detailscreen.dart';
 
 import 'package:e_commerce/screens/homepage.dart';
 import 'package:e_commerce/screens/search_category.dart';
@@ -108,10 +109,21 @@ class ListProduct extends StatelessWidget {
                     scrollDirection: Axis.vertical,
                     children: snapShot
                         .map(
-                          (e) => SingleProduct(
-                            price: e.price,
-                            image: e.image,
-                            name: e.name,
+                          (e) => GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                      builder: (ctx) => DetailScreen(
+                                            image: e.image,
+                                            name: e.name,
+                                            price: e.price,
+                                          )));
+                            },
+                            child: SingleProduct(
+                              price: e.price,
+                              image: e.image,
+                              name: e.name,
+                            ),
                           ),
                         )
                         .toList(),
