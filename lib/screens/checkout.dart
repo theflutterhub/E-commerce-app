@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce/model/cartmodel.dart';
+import 'package:e_commerce/model/product.dart';
 import 'package:e_commerce/provider/product_provider.dart';
 import 'package:e_commerce/screens/homepage.dart';
 import 'package:e_commerce/widgets/cartsingleproduct.dart';
+import 'package:e_commerce/widgets/mybutton.dart';
 import 'package:e_commerce/widgets/notification_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,7 +24,7 @@ class _CheckOutState extends State<CheckOut> {
 
   ProductProvider productProvider;
 
-  Widget _buildBottomDetail({String startName, String endName}) {
+  Widget _buildBottomSingleDetail({String startName, String endName}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -39,28 +42,26 @@ class _CheckOutState extends State<CheckOut> {
 
   User user;
   double total;
+  List<CartModel> myList;
   int index;
   Widget _buildButton() {
     return Column(
         children: productProvider.userModelList.map((e) {
       return Container(
-        height: 55,
-        width: double.infinity,
-        child: RaisedButton(
-          color: Color(0xff746bc9),
-          child: Text(
-            "Buy",
-            style: TextStyle(fontSize: 18, color: Colors.white),
-          ),
+        height: 50,
+        child: MyButton(
+          name: "Buy",
           onPressed: () {
-            if (productProvider.checkOutModelList.isNotEmpty) {
-              FirebaseFirestore.instance.collection("Order").doc(user.uid).set({
-                "Product": productProvider.checkOutModelList
+            if (productProvider.getCheckOutModelList.isNotEmpty) {
+              FirebaseFirestore.instance.collection("Order").add({
+                "Product": productProvider.getCheckOutModelList
                     .map((c) => {
                           "ProductName": c.name,
                           "ProductPrice": c.price,
                           "ProductQuetity": c.quentity,
-                          "ProductImage":c.image,
+                          "ProductImage": c.image,
+                          "Product Color": c.color,
+                          "Product Size": c.size,
                         })
                     .toList(),
                 "TotalPrice": total.toStringAsFixed(2),
@@ -68,9 +69,14 @@ class _CheckOutState extends State<CheckOut> {
                 "UserEmail": e.userEmail,
                 "UserNumber": e.userPhoneNumber,
                 "UserAddress": e.userAddress,
-                "UserUid": user.uid,
+                "UserId": user.uid,
               });
-              productProvider.clearCheckoutProduct();
+              setState(() {
+                myList.clear();
+                productProvider.cartModelList.clear();
+              });
+
+              productProvider.addNotification("Notification");
             } else {
               _scaffoldKey.currentState.showSnackBar(
                 SnackBar(
@@ -82,6 +88,13 @@ class _CheckOutState extends State<CheckOut> {
         ),
       );
     }).toList());
+  }
+
+  @override
+  void initState() {
+    productProvider = Provider.of<ProductProvider>(context, listen: false);
+    myList = productProvider.checkOutModelList;
+    super.initState();
   }
 
   @override
@@ -104,6 +117,7 @@ class _CheckOutState extends State<CheckOut> {
       discount = 0.0;
       shipping = 0.0;
     }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -143,17 +157,18 @@ class _CheckOutState extends State<CheckOut> {
             Container(
               height: 480,
               child: ListView.builder(
-                itemCount: productProvider.getCheckOutModelListLength,
+                itemCount: myList.length,
                 itemBuilder: (ctx, myIndex) {
                   index = myIndex;
                   return CartSingleProduct(
                     isCount: true,
                     index: myIndex,
-                    image: productProvider.getCheckOutModelList[myIndex].image,
-                    name: productProvider.getCheckOutModelList[myIndex].name,
-                    price: productProvider.getCheckOutModelList[myIndex].price,
-                    quentity:
-                        productProvider.getCheckOutModelList[myIndex].quentity,
+                    color: myList[myIndex].color,
+                    size: myList[myIndex].size,
+                    image: myList[myIndex].image,
+                    name: myList[myIndex].name,
+                    price: myList[myIndex].price,
+                    quentity: myList[myIndex].quentity,
                   );
                 },
               ),
@@ -163,19 +178,19 @@ class _CheckOutState extends State<CheckOut> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  _buildBottomDetail(
+                  _buildBottomSingleDetail(
                     startName: "Subtotal",
                     endName: "\$ ${subTotal.toStringAsFixed(2)}",
                   ),
-                  _buildBottomDetail(
+                  _buildBottomSingleDetail(
                     startName: "Discount",
                     endName: "${discount.toStringAsFixed(2)}%",
                   ),
-                  _buildBottomDetail(
+                  _buildBottomSingleDetail(
                     startName: "Shipping",
                     endName: "\$ ${shipping.toStringAsFixed(2)}",
                   ),
-                  _buildBottomDetail(
+                  _buildBottomSingleDetail(
                     startName: "Total",
                     endName: "\$ ${total.toStringAsFixed(2)}",
                   ),

@@ -107,8 +107,52 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  List<bool> isSelected = [true, false, false, false];
+  List<bool> sized = [true, false, false, false];
   List<bool> colored = [true, false, false, false];
+  int sizeIndex = 0;
+  String size;
+  void getSize() {
+    if (sizeIndex == 0) {
+      setState(() {
+        size = "S";
+      });
+    } else if (sizeIndex == 1) {
+      setState(() {
+        size = "M";
+      });
+    } else if (sizeIndex == 2) {
+      setState(() {
+        size = "L";
+      });
+    } else if (sizeIndex == 3) {
+      setState(() {
+        size = "XL";
+      });
+    }
+  }
+
+  int colorIndex = 0;
+  String color;
+  void getColor() {
+    if (colorIndex == 0) {
+      setState(() {
+        color = "Light Blue";
+      });
+    } else if (colorIndex == 1) {
+      setState(() {
+        color = "Light Green";
+      });
+    } else if (colorIndex == 2) {
+      setState(() {
+        color = "Light Yellow";
+      });
+    } else if (colorIndex == 3) {
+      setState(() {
+        color = "Cyan";
+      });
+    }
+  }
+
   Widget _buildSizePart() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,18 +164,6 @@ class _DetailScreenState extends State<DetailScreen> {
         SizedBox(
           height: 15,
         ),
-        // Container(
-        //   width: 265,
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //     children: <Widget>[
-        //       _buildSizeProduct(name: "S"),
-        //       _buildSizeProduct(name: "M"),
-        //       _buildSizeProduct(name: "L"),
-        //       _buildSizeProduct(name: "XL"),
-        //     ],
-        //   ),
-        // )
         Container(
           width: 265,
           child: ToggleButtons(
@@ -143,18 +175,19 @@ class _DetailScreenState extends State<DetailScreen> {
             ],
             onPressed: (int index) {
               setState(() {
-                for (int indexBtn = 0;
-                    indexBtn < isSelected.length;
-                    indexBtn++) {
+                for (int indexBtn = 0; indexBtn < sized.length; indexBtn++) {
                   if (indexBtn == index) {
-                    isSelected[indexBtn] = true;
+                    sized[indexBtn] = true;
                   } else {
-                    isSelected[indexBtn] = false;
+                    sized[indexBtn] = false;
                   }
                 }
               });
+              setState(() {
+                sizeIndex = index;
+              });
             },
-            isSelected: isSelected,
+            isSelected: sized,
           ),
         ),
       ],
@@ -175,18 +208,6 @@ class _DetailScreenState extends State<DetailScreen> {
         SizedBox(
           height: 15,
         ),
-        // Container(
-        //   width: 265,
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //     children: <Widget>[
-        //       _buildColorProduct(color: Colors.blue[200]),
-        //       _buildColorProduct(color: Colors.green[200]),
-        //       _buildColorProduct(color: Colors.yellow[200]),
-        //       _buildColorProduct(color: Colors.cyan[300]),
-        //     ],
-        //   ),
-        // ),
         Container(
           width: 265,
           child: ToggleButtons(
@@ -207,6 +228,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     colored[indexBtn] = false;
                   }
                 }
+              });
+              setState(() {
+                colorIndex = index;
               });
             },
             isSelected: colored,
@@ -234,14 +258,16 @@ class _DetailScreenState extends State<DetailScreen> {
           height: 40,
           width: 130,
           decoration: BoxDecoration(
-            color: Colors.blue[200],
-            borderRadius: BorderRadius.circular(20),
+            color: Color(0xff746bc9),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               GestureDetector(
-                child: Icon(Icons.remove),
+                child: Icon(
+                  Icons.remove,
+                  color: Colors.white,
+                ),
                 onTap: () {
                   setState(() {
                     if (count > 1) {
@@ -252,10 +278,13 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
               Text(
                 count.toString(),
-                style: myStyle,
+                style: TextStyle(fontSize: 18, color: Colors.white),
               ),
               GestureDetector(
-                child: Icon(Icons.add),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
                 onTap: () {
                   setState(() {
                     count++;
@@ -273,10 +302,14 @@ class _DetailScreenState extends State<DetailScreen> {
     return Container(
       height: 60,
       child: MyButton(
-        name: "CheckOut",
+        name: "Add To Cart",
         onPressed: () {
+          getSize();
+          getColor();
           productProvider.getCartData(
             image: widget.image,
+            color: color,
+            size: size,
             name: widget.name,
             price: widget.price,
             quentity: count,

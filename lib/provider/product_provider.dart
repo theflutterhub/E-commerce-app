@@ -35,7 +35,6 @@ class ProductProvider with ChangeNotifier {
         userModelList = newList;
       },
     );
-    notifyListeners();
   }
 
   List<UserModel> get getUserModelList {
@@ -61,9 +60,13 @@ class ProductProvider with ChangeNotifier {
     int quentity,
     double price,
     String name,
+    String color,
+    String size,
     String image,
   }) {
     checkOutModel = CartModel(
+      color: color,
+      size: size,
       price: price,
       name: name,
       image: image,
@@ -84,11 +87,15 @@ class ProductProvider with ChangeNotifier {
     String name,
     String image,
     int quentity,
+    String color,
+    String size,
     double price,
   }) {
     cartModel = CartModel(
       price: price,
       name: name,
+      color: color,
+      size: size,
       image: image,
       quentity: quentity,
     );
@@ -208,7 +215,9 @@ class ProductProvider with ChangeNotifier {
     return notificationList.length;
   }
 
-
+  get getNotificationList {
+    return notificationList;
+  }
 
   List<Product> searchList;
   void getSearchList({List<Product> list}) {

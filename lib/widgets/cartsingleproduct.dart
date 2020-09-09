@@ -7,10 +7,14 @@ class CartSingleProduct extends StatefulWidget {
   final String image;
   final int index;
   final bool isCount;
+  final String color;
+  final String size;
   int quentity;
   final double price;
   CartSingleProduct({
     this.index,
+    this.color,
+    this.size,
     this.isCount,
     this.quentity,
     this.image,
@@ -28,6 +32,7 @@ class _CartSingleProductState extends State<CartSingleProduct> {
   @override
   Widget build(BuildContext context) {
     productProvider = Provider.of<ProductProvider>(context);
+
     return Container(
       height: 150,
       width: double.infinity,
@@ -77,9 +82,21 @@ class _CartSingleProductState extends State<CartSingleProduct> {
                             ],
                           ),
                         ),
-                        Text(
-                          "Cloths",
-                          style: myStyle,
+                        Container(
+                          width: 150,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.color,
+                                style: myStyle,
+                              ),
+                              Text(
+                                widget.size,
+                                style: myStyle,
+                              )
+                            ],
+                          ),
                         ),
                         Text(
                           "\$${widget.price.toString()}",
@@ -106,6 +123,8 @@ class _CartSingleProductState extends State<CartSingleProduct> {
                                             productProvider.getCheckOutData(
                                               quentity: widget.quentity,
                                               image: widget.image,
+                                              color: widget.color,
+                                              size: widget.size,
                                               name: widget.name,
                                               price: widget.price,
                                             );
@@ -125,6 +144,8 @@ class _CartSingleProductState extends State<CartSingleProduct> {
                                           productProvider.getCheckOutData(
                                             quentity: widget.quentity,
                                             image: widget.image,
+                                            color: widget.color,
+                                            size: widget.size,
                                             name: widget.name,
                                             price: widget.price,
                                           );

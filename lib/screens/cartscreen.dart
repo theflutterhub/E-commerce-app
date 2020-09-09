@@ -30,7 +30,6 @@ class _CartScreenState extends State<CartScreen> {
             style: TextStyle(fontSize: 18, color: Colors.white),
           ),
           onPressed: () {
-            productProvider.addNotification("Notification");
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (ctx) => CheckOut(),
@@ -50,7 +49,7 @@ class _CartScreenState extends State<CartScreen> {
             color: Colors.black,
           ),
           onPressed: () {
-             Navigator.of(context).pushReplacement(
+            Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (ctx) => HomePage()));
           },
         ),
@@ -62,6 +61,8 @@ class _CartScreenState extends State<CartScreen> {
         itemCount: productProvider.getCartModelListLength,
         itemBuilder: (ctx, index) => CartSingleProduct(
           isCount: false,
+          color: productProvider.getCartModelList[index].color,
+          size: productProvider.getCartModelList[index].size,
           index: index,
           image: productProvider.getCartModelList[index].image,
           name: productProvider.getCartModelList[index].name,
