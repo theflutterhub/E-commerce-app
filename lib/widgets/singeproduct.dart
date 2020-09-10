@@ -12,14 +12,14 @@ class SingleProduct extends StatelessWidget {
     height = MediaQuery.of(context).size.height;
     return Card(
       child: Container(
-        height: height*0.3+20,
-        width: width*0.2*2+10,
+        height: height * 0.3,
+        width: width * 0.2 * 2 + 10,
         child: Column(
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Container(
-                height: 190,
+                height: height * 0.2,
                 width: 160,
                 decoration: BoxDecoration(
                   image: DecorationImage(

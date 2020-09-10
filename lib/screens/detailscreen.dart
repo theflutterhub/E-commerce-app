@@ -1,4 +1,4 @@
-import 'package:e_commerce/screens/cartscreen.dart';
+import 'package:e_commerce/screens/checkout.dart';
 import 'package:e_commerce/screens/homepage.dart';
 import 'package:e_commerce/widgets/mybutton.dart';
 import 'package:e_commerce/widgets/notification_button.dart';
@@ -291,7 +291,7 @@ class _DetailScreenState extends State<DetailScreen> {
         onPressed: () {
           getSize();
           getColor();
-          productProvider.getCartData(
+          productProvider.getCheckOutData(
             image: widget.image,
             color: color,
             size: size,
@@ -301,7 +301,7 @@ class _DetailScreenState extends State<DetailScreen> {
           );
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (ctx) => CartScreen(),
+              builder: (ctx) => CheckOut(),
             ),
           );
         },

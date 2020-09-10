@@ -49,11 +49,12 @@ class ListProduct extends StatelessWidget {
 
   Widget _buildMyGridView(context) {
     final Orientation orientation = MediaQuery.of(context).orientation;
+
     return Container(
       height: 700,
       child: GridView.count(
         crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
-        childAspectRatio: orientation == Orientation.portrait ? 0.7 : 0.9,
+        childAspectRatio: orientation == Orientation.portrait ? 0.8 : 0.9,
         scrollDirection: Axis.vertical,
         children: snapShot
             .map(

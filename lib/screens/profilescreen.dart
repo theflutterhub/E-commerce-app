@@ -25,15 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   static String p =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-
   RegExp regExp = new RegExp(p);
-  void finalVaildation() {
-    userDetailUpdate();
-    setState(() {
-      edit = false;
-    });
-  }
-
   bool isMale = false;
   void vaildation() async {
     if (userName.text.isEmpty && phoneNumber.text.isEmpty) {
@@ -61,7 +53,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       );
     } else {
-      finalVaildation();
+      userDetailUpdate();
+      setState(() {
+        edit = false;
+      });
     }
   }
 
@@ -77,25 +72,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  User user;
+  String userUid;
 
   Future<String> _uploadImage({File image}) async {
-    user = FirebaseAuth.instance.currentUser;
     StorageReference storageReference =
-        FirebaseStorage.instance.ref().child("UserImage/${user.uid}");
+        FirebaseStorage.instance.ref().child("UserImage/$userUid");
     StorageUploadTask uploadTask = storageReference.putFile(image);
     StorageTaskSnapshot snapshot = await uploadTask.onComplete;
     String imageUrl = await snapshot.ref.getDownloadURL();
     return imageUrl;
   }
 
+  void getUserUid() {
+    User myUser = FirebaseAuth.instance.currentUser;
+    userUid = myUser.uid;
+  }
+
+  var imageMap;
   void userDetailUpdate() async {
-    var imageUrl = await _uploadImage(image: _pickedImage);
-    FirebaseFirestore.instance.collection("User").doc(user.uid).update({
+    _pickedImage != null
+        ? imageMap = await _uploadImage(image: _pickedImage)
+        : Container();
+    FirebaseFirestore.instance.collection("User").doc(userUid).update({
       "UserName": userName.text,
       "UserGender": isMale == true ? "Male" : "Female",
       "UserNumber": phoneNumber.text,
-      "UserImage": imageUrl,
+      "UserImage": imageMap,
       "UserAddress": address.text
     });
   }
@@ -144,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isMale = false;
     }
     return Container(
-      height: 300,
+      height: MediaQuery.of(context).size.height * 0.3,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -207,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildTextFormFliedPart() {
     return Container(
-      height: 300,
+      height: MediaQuery.of(context).size.height * 0.3,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -247,8 +249,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    User user = FirebaseAuth.instance.currentUser;
+    getUserUid();
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       key: _scaffoldKey,
       backgroundColor: Color(0xfff8f8f8),
       appBar: AppBar(
@@ -307,7 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             }
             var myDoc = snapshot.data.docs;
             myDoc.forEach((checkDocs) {
-              if (checkDocs.data()["UserId"] == user.uid) {
+              if (checkDocs.data()["UserId"] == userUid) {
                 userModel = UserModel(
                   userEmail: checkDocs.data()["UserEmail"],
                   userImage: checkDocs.data()["UserImage"],
@@ -317,7 +320,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   userPhoneNumber: checkDocs.data()["UserNumber"],
                 );
               }
-              print(userModel.userImage);
             });
             return Container(
               height: double.infinity,
@@ -329,7 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Stack(
                     children: [
                       Container(
-                        height: 130,
+                        height: MediaQuery.of(context).size.height * 0.1 + 50,
                         width: double.infinity,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -346,11 +348,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       edit == true
                           ? Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 225, top: 80),
+                              padding: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).viewPadding.left +
+                                          220,
+                                  top: MediaQuery.of(context).viewPadding.left +
+                                      80),
                               child: Card(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                                 child: GestureDetector(
                                   onTap: () {
                                     myDialogBox(context);
@@ -369,13 +376,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                   Container(
-                    height: 300,
+                    height: MediaQuery.of(context).size.height * 0.4,
                     width: double.infinity,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
-                          height: 300,
+                          height: MediaQuery.of(context).size.height * 0.4,
                           child: edit == true
                               ? _buildTextFormFliedPart()
                               : _buildContainerPart(),
@@ -389,7 +396,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20)),
-                      width: 200,
+                      width: MediaQuery.of(context).size.width * 0.4,
                       child: edit == false
                           ? MyButton(
                               name: "Edit Profile",

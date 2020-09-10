@@ -1,7 +1,8 @@
 import 'package:e_commerce/model/categoryicon.dart';
 import 'package:e_commerce/model/usermodel.dart';
 import 'package:e_commerce/screens/about.dart';
-import 'package:e_commerce/screens/cartscreen.dart';
+import 'package:e_commerce/screens/checkout.dart';
+
 import 'package:e_commerce/screens/contactus.dart';
 
 import 'package:e_commerce/screens/profilescreen.dart';
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> {
   double height, width;
   bool homeColor = true;
 
-  bool cartColor = false;
+  bool checkoutColor = false;
 
   bool aboutColor = false;
 
@@ -68,6 +69,7 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.black),
         ),
         currentAccountPicture: CircleAvatar(
+          backgroundColor: Colors.white,
           backgroundImage: e.userImage == null
               ? AssetImage("images/userImage.png")
               : NetworkImage(e.userImage),
@@ -89,7 +91,7 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 homeColor = true;
                 contactUsColor = false;
-                cartColor = false;
+                checkoutColor = false;
                 aboutColor = false;
                 profileColor = false;
               });
@@ -98,20 +100,20 @@ class _HomePageState extends State<HomePage> {
             title: Text("Home"),
           ),
           ListTile(
-            selected: cartColor,
+            selected: checkoutColor,
             onTap: () {
               setState(() {
-                cartColor = true;
+                checkoutColor = true;
                 contactUsColor = false;
                 homeColor = false;
                 profileColor = false;
                 aboutColor = false;
               });
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (ctx) => CartScreen()));
+                  MaterialPageRoute(builder: (ctx) => CheckOut()));
             },
             leading: Icon(Icons.shopping_cart),
-            title: Text("Cart"),
+            title: Text("Checkout"),
           ),
           ListTile(
             selected: aboutColor,
@@ -121,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                 contactUsColor = false;
                 homeColor = false;
                 profileColor = false;
-                cartColor = false;
+                checkoutColor = false;
               });
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (ctx) => About()));
@@ -137,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                 contactUsColor = false;
                 homeColor = false;
                 profileColor = true;
-                cartColor = false;
+                checkoutColor = false;
               });
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -153,7 +155,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               setState(() {
                 contactUsColor = true;
-                cartColor = false;
+                checkoutColor = false;
                 profileColor = false;
                 homeColor = false;
                 aboutColor = false;
@@ -183,8 +185,8 @@ class _HomePageState extends State<HomePage> {
         autoplay: true,
         showIndicator: false,
         images: [
-          AssetImage("images/manpant.jfif"),
-          AssetImage("images/watch.jpg"),
+          AssetImage("images/man.jpg"),
+          AssetImage("images/women.jpg"),
           AssetImage("images/camera.jpg"),
         ],
       ),

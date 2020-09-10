@@ -3,7 +3,7 @@ import 'package:e_commerce/model/cartmodel.dart';
 
 import 'package:e_commerce/provider/product_provider.dart';
 import 'package:e_commerce/screens/homepage.dart';
-import 'package:e_commerce/widgets/cartsingleproduct.dart';
+import 'package:e_commerce/widgets/checkout_singleproduct.dart';
 import 'package:e_commerce/widgets/mybutton.dart';
 import 'package:e_commerce/widgets/notification_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,7 +42,7 @@ class _CheckOutState extends State<CheckOut> {
   User user;
   double total;
   List<CartModel> myList;
-  int index;
+
   Widget _buildButton() {
     return Column(
         children: productProvider.userModelList.map((e) {
@@ -72,7 +72,6 @@ class _CheckOutState extends State<CheckOut> {
               });
               setState(() {
                 myList.clear();
-                productProvider.cartModelList.clear();
               });
 
               productProvider.addNotification("Notification");
@@ -158,9 +157,7 @@ class _CheckOutState extends State<CheckOut> {
               child: ListView.builder(
                 itemCount: myList.length,
                 itemBuilder: (ctx, myIndex) {
-                  index = myIndex;
-                  return CartSingleProduct(
-                    isCount: true,
+                  return CheckOutSingleProduct(
                     index: myIndex,
                     color: myList[myIndex].color,
                     size: myList[myIndex].size,

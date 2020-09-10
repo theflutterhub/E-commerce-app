@@ -104,14 +104,14 @@ class _LoginState extends State<Login> {
 
   Widget _buildAllPart() {
     return Container(
-      height: 300,
+      height: MediaQuery.of(context).size.height * 0.4,
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Text(
             "Login",
-            style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
           MyTextFormField(
             name: "Email",

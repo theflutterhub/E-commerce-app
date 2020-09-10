@@ -9,8 +9,7 @@ import 'package:flutter/material.dart';
 class ProductProvider with ChangeNotifier {
   List<Product> feature = [];
   Product featureData;
-  List<CartModel> cartModelList = [];
-  CartModel cartModel;
+
   List<CartModel> checkOutModelList = [];
   CartModel checkOutModel;
   List<UserModel> userModelList = [];
@@ -39,11 +38,6 @@ class ProductProvider with ChangeNotifier {
 
   List<UserModel> get getUserModelList {
     return userModelList;
-  }
-
-  void deleteCartProduct(int index) {
-    cartModelList.removeAt(index);
-    notifyListeners();
   }
 
   void deleteCheckoutProduct(int index) {
@@ -81,33 +75,6 @@ class ProductProvider with ChangeNotifier {
 
   int get getCheckOutModelListLength {
     return checkOutModelList.length;
-  }
-
-  void getCartData({
-    String name,
-    String image,
-    int quentity,
-    String color,
-    String size,
-    double price,
-  }) {
-    cartModel = CartModel(
-      price: price,
-      name: name,
-      color: color,
-      size: size,
-      image: image,
-      quentity: quentity,
-    );
-    cartModelList.add(cartModel);
-  }
-
-  List<CartModel> get getCartModelList {
-    return List.from(cartModelList);
-  }
-
-  int get getCartModelListLength {
-    return cartModelList.length;
   }
 
   Future<void> getFeatureData() async {
@@ -231,5 +198,4 @@ class ProductProvider with ChangeNotifier {
     }).toList();
     return searchShirt;
   }
-  
 }

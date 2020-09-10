@@ -142,7 +142,6 @@ class _SignUpState extends State<SignUp> {
     return Expanded(
       flex: 1,
       child: Container(
-        height: 340,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -204,36 +203,38 @@ class _SignUpState extends State<SignUp> {
   }
 
   Widget _buildBottomPart() {
-    return Container(
-      height: 500,
-      margin: EdgeInsets.symmetric(horizontal: 10),
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildAllTextFormField(),
-          isLoading == false
-              ? MyButton(
-                  name: "SignUp",
-                  onPressed: () {
-                    vaildation();
-                  },
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
-                ),
-          ChangeScreen(
-            name: "Login",
-            whichAccount: "I Have Already An Account!",
-            onTap: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (ctx) => Login(),
-                ),
-              );
-            },
-          ),
-        ],
+    return Expanded(
+      flex: 2,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10),
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _buildAllTextFormField(),
+            isLoading == false
+                ? MyButton(
+                    name: "SignUp",
+                    onPressed: () {
+                      vaildation();
+                    },
+                  )
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ),
+            ChangeScreen(
+              name: "Login",
+              whichAccount: "I Have Already An Account!",
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (ctx) => Login(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -247,26 +248,27 @@ class _SignUpState extends State<SignUp> {
         child: Form(
           key: _formKey,
           child: Container(
+            height: MediaQuery.of(context).size.height * 0.9,
+            width: double.infinity,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  height: 240,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        "Register",
-                        style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          "Register",
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
                 ),
                 _buildBottomPart(),
               ],
