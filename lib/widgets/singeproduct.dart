@@ -7,10 +7,13 @@ class SingleProduct extends StatelessWidget {
   SingleProduct({this.image, this.name, this.price});
   @override
   Widget build(BuildContext context) {
+    double width, height;
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
     return Card(
       child: Container(
-        height: 260,
-        width: 180,
+        height: height*0.3+20,
+        width: width*0.2*2+10,
         child: Column(
           children: <Widget>[
             Container(

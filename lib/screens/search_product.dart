@@ -1,5 +1,4 @@
 import 'package:e_commerce/model/product.dart';
-import 'package:e_commerce/provider/category_provider.dart';
 import 'package:e_commerce/provider/product_provider.dart';
 
 import 'package:e_commerce/widgets/singeproduct.dart';

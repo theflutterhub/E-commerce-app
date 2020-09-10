@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce/model/cartmodel.dart';
-import 'package:e_commerce/model/product.dart';
+
 import 'package:e_commerce/provider/product_provider.dart';
 import 'package:e_commerce/screens/homepage.dart';
 import 'package:e_commerce/widgets/cartsingleproduct.dart';
 import 'package:e_commerce/widgets/mybutton.dart';
 import 'package:e_commerce/widgets/notification_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

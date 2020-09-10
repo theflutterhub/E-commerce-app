@@ -19,21 +19,6 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   int count = 1;
   ProductProvider productProvider;
-  // Widget _buildSizeProduct({String name}) {
-  //   return Container(
-  //     height: 60,
-  //     width: 60,
-  //     color: Color(0xfff2f2f2),
-  //     child: Center(
-  //       child: Text(
-  //         name,
-  //         style: TextStyle(
-  //           fontSize: 17,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _buildColorProduct({Color color}) {
     return Container(

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce/screens/homepage.dart';
 import 'package:e_commerce/screens/login.dart';
 import 'package:e_commerce/widgets/changescreen.dart';
 import 'package:e_commerce/widgets/mybutton.dart';
@@ -27,8 +28,58 @@ final TextEditingController password = TextEditingController();
 final TextEditingController address = TextEditingController();
 
 bool isMale = true;
+bool isLoading = false;
 
 class _SignUpState extends State<SignUp> {
+  void submit() async {
+    UserCredential result;
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: email.text, password: password.text);
+      print(result);
+    } on PlatformException catch (error) {
+      var message = "Please Check Your Internet Connection ";
+      if (error.message != null) {
+        message = error.message;
+      }
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(message.toString()),
+        duration: Duration(milliseconds: 600),
+        backgroundColor: Theme.of(context).primaryColor,
+      ));
+      setState(() {
+        isLoading = false;
+      });
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text(error.toString()),
+        duration: Duration(milliseconds: 600),
+        backgroundColor: Theme.of(context).primaryColor,
+      ));
+
+      print(error);
+    }
+    FirebaseFirestore.instance.collection("User").doc(result.user.uid).set({
+      "UserName": userName.text,
+      "UserId": result.user.uid,
+      "UserEmail": email.text,
+      "UserAddress": address.text,
+      "UserGender": isMale == true ? "Male" : "Female",
+      "UserNumber": phoneNumber.text,
+    });
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (ctx) => HomePage()));
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   void vaildation() async {
     if (userName.text.isEmpty &&
         email.text.isEmpty &&
@@ -83,25 +134,7 @@ class _SignUpState extends State<SignUp> {
         ),
       );
     } else {
-      try {
-        UserCredential result = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: email.text, password: password.text);
-        FirebaseFirestore.instance.collection("User").doc(result.user.uid).set({
-          "UserName": userName.text,
-          "UserId": result.user.uid,
-          "UserEmail": email.text,
-          "UserAddress": address.text,
-          "UserGender": isMale == true ? "Male" : "Female",
-          "UserNumber": phoneNumber.text,
-        });
-      } on PlatformException catch (e) {
-        _scaffoldKey.currentState.showSnackBar(
-          SnackBar(
-            content: Text(e.message),
-          ),
-        );
-      }
+      submit();
     }
   }
 
@@ -179,12 +212,16 @@ class _SignUpState extends State<SignUp> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           _buildAllTextFormField(),
-          MyButton(
-            name: "SignUp",
-            onPressed: () {
-              vaildation();
-            },
-          ),
+          isLoading == false
+              ? MyButton(
+                  name: "SignUp",
+                  onPressed: () {
+                    vaildation();
+                  },
+                )
+              : Center(
+                  child: CircularProgressIndicator(),
+                ),
           ChangeScreen(
             name: "Login",
             whichAccount: "I Have Already An Account!",

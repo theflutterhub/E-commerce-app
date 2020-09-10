@@ -3,8 +3,8 @@ import 'package:e_commerce/model/usermodel.dart';
 import 'package:e_commerce/screens/about.dart';
 import 'package:e_commerce/screens/cartscreen.dart';
 import 'package:e_commerce/screens/contactus.dart';
+
 import 'package:e_commerce/screens/profilescreen.dart';
-import 'package:e_commerce/screens/search_category.dart';
 
 import '../provider/product_provider.dart';
 import '../provider/category_provider.dart';
@@ -36,7 +36,7 @@ Product smartPhoneData;
 class _HomePageState extends State<HomePage> {
   Widget _buildCategoryProduct({String image, int color}) {
     return CircleAvatar(
-      maxRadius: 38,
+      maxRadius: height * 0.1 / 2.1,
       backgroundColor: Color(color),
       child: Container(
         height: 40,
@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  double height, width;
   bool homeColor = true;
 
   bool cartColor = false;
@@ -56,7 +57,7 @@ class _HomePageState extends State<HomePage> {
 
   bool contactUsColor = false;
   bool profileColor = false;
-
+  MediaQueryData mediaQuery;
   Widget _buildUserAccountsDrawerHeader() {
     List<UserModel> userModel = productProvider.userModelList;
     return Column(
@@ -177,7 +178,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildImageSlider() {
     return Container(
-      height: 240,
+      height: height * 0.3,
       child: Carousel(
         autoplay: true,
         showIndicator: false,
@@ -308,7 +309,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: <Widget>[
         Container(
-          height: 50,
+          height: height * 0.1 - 30,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -422,7 +423,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: <Widget>[
         Container(
-          height: 50,
+          height: height * 0.1 - 30,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
@@ -513,11 +514,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-
-  @override
-  Widget build(BuildContext context) {
-    categoryProvider = Provider.of<CategoryProvider>(context);
-    productProvider = Provider.of<ProductProvider>(context);
+  void getCallAllFunction() {
     categoryProvider.getShirtData();
     categoryProvider.getDressData();
     categoryProvider.getShoesData();
@@ -533,6 +530,15 @@ class _HomePageState extends State<HomePage> {
     categoryProvider.getPantIconData();
     categoryProvider.getTieIconData();
     productProvider.getUserData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    categoryProvider = Provider.of<CategoryProvider>(context);
+    productProvider = Provider.of<ProductProvider>(context);
+    getCallAllFunction();
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       key: _key,

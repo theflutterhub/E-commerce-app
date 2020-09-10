@@ -2,7 +2,6 @@ import 'package:e_commerce/screens/homepage.dart';
 import 'package:flutter/material.dart';
 
 class About extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -53,7 +52,7 @@ class About extends StatelessWidget {
                 child: Wrap(
                   children: [
                     Text(
-                      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
+                      "Neru My Black Directionary,This App You Can Buy Dress Shirt Shoes Pant And Tie And Many Other Product In Cheap Price, Now Its Time Buy SomeThing",
                       style: TextStyle(fontSize: 22, color: Colors.grey),
                     ),
                   ],

@@ -1,11 +1,8 @@
-
 import 'package:e_commerce/provider/category_provider.dart';
 import 'package:e_commerce/provider/product_provider.dart';
-
 import 'package:e_commerce/screens/homepage.dart';
 import 'package:e_commerce/screens/login.dart';
-import 'package:e_commerce/screens/welcomescreen.dart';
-import 'package:e_commerce/ui/snapchatui.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,23 +27,21 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        theme: ThemeData(iconTheme: IconThemeData(color: Colors.black)),
+        theme: ThemeData(
+          primaryColor: Color(0xff746bc9),
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
         debugShowCheckedModeBanner: false,
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return WelcomeScreen();
-            } else if (snapshot.hasData) {
+           if (snapshot.hasData) {
               return HomePage();
             } else {
               return Login();
             }
           },
         ),
-
-
-
       ),
     );
   }
