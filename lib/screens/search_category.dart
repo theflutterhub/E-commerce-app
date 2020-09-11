@@ -67,15 +67,28 @@ class SearchCategory extends SearchDelegate<void> {
     CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context);
     List<Product> searchCategory = categoryProvider.searchCategoryList(query);
     return GridView.count(
-        childAspectRatio: 0.76,
+        childAspectRatio: 0.87,
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
         children: searchCategory
-            .map((e) => SingleProduct(
-                  image: e.image,
-                  name: e.name,
-                  price: e.price,
+            .map((e) => GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => DetailScreen(
+                          image: e.image,
+                          name: e.name,
+                          price: e.price,
+                        ),
+                      ),
+                    );
+                  },
+                  child: SingleProduct(
+                    image: e.image,
+                    name: e.name,
+                    price: e.price,
+                  ),
                 ))
             .toList());
   }

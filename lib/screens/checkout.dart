@@ -116,84 +116,96 @@ class _CheckOutState extends State<CheckOut> {
       shipping = 0.0;
     }
 
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("CheckOut Page", style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+    return WillPopScope(
+      onWillPop: () async {
+        return Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (ctx) => HomePage(),
           ),
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (ctx) => HomePage(),
-              ),
-            );
-          },
-        ),
-        actions: <Widget>[
-          NotificationButton(),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        height: 70,
-        width: 100,
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        padding: EdgeInsets.only(bottom: 15),
-        child: _buildButton(),
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: 480,
-              child: ListView.builder(
-                itemCount: myList.length,
-                itemBuilder: (ctx, myIndex) {
-                  return CheckOutSingleProduct(
-                    index: myIndex,
-                    color: myList[myIndex].color,
-                    size: myList[myIndex].size,
-                    image: myList[myIndex].image,
-                    name: myList[myIndex].name,
-                    price: myList[myIndex].price,
-                    quentity: myList[myIndex].quentity,
-                  );
-                },
-              ),
+        );
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("CheckOut Page", style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
             ),
-            Container(
-              height: 150,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  _buildBottomSingleDetail(
-                    startName: "Subtotal",
-                    endName: "\$ ${subTotal.toStringAsFixed(2)}",
-                  ),
-                  _buildBottomSingleDetail(
-                    startName: "Discount",
-                    endName: "${discount.toStringAsFixed(2)}%",
-                  ),
-                  _buildBottomSingleDetail(
-                    startName: "Shipping",
-                    endName: "\$ ${shipping.toStringAsFixed(2)}",
-                  ),
-                  _buildBottomSingleDetail(
-                    startName: "Total",
-                    endName: "\$ ${total.toStringAsFixed(2)}",
-                  ),
-                ],
-              ),
-            )
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (ctx) => HomePage(),
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            NotificationButton(),
           ],
+        ),
+        bottomNavigationBar: Container(
+          height: 70,
+          width: 100,
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.only(bottom: 15),
+          child: _buildButton(),
+        ),
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Container(
+                  child: ListView.builder(
+                    itemCount: myList.length,
+                    itemBuilder: (ctx, myIndex) {
+                      return CheckOutSingleProduct(
+                        index: myIndex,
+                        color: myList[myIndex].color,
+                        size: myList[myIndex].size,
+                        image: myList[myIndex].image,
+                        name: myList[myIndex].name,
+                        price: myList[myIndex].price,
+                        quentity: myList[myIndex].quentity,
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      _buildBottomSingleDetail(
+                        startName: "Subtotal",
+                        endName: "\$ ${subTotal.toStringAsFixed(2)}",
+                      ),
+                      _buildBottomSingleDetail(
+                        startName: "Discount",
+                        endName: "${discount.toStringAsFixed(2)}%",
+                      ),
+                      _buildBottomSingleDetail(
+                        startName: "Shipping",
+                        endName: "\$ ${shipping.toStringAsFixed(2)}",
+                      ),
+                      _buildBottomSingleDetail(
+                        startName: "Total",
+                        endName: "\$ ${total.toStringAsFixed(2)}",
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -312,51 +312,60 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     productProvider = Provider.of<ProductProvider>(context);
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Detail Page", style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+    return WillPopScope(
+      onWillPop: () async {
+        return Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (ctx) => HomePage(),
           ),
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (ctx) => HomePage(),
-              ),
-            );
-          },
-        ),
-        actions: <Widget>[
-          NotificationButton(),
-        ],
-      ),
-      body: Container(
-        child: ListView(
-          children: <Widget>[
-            _buildImage(),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _buildNameToDescriptionPart(),
-                  _buildDiscription(),
-                  _buildSizePart(),
-                  _buildColorPart(),
-                  _buildQuentityPart(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  _buildButtonPart(),
-                ],
-              ),
+        );
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Detail Page", style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
             ),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (ctx) => HomePage(),
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            NotificationButton(),
           ],
+        ),
+        body: Container(
+          child: ListView(
+            children: <Widget>[
+              _buildImage(),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildNameToDescriptionPart(),
+                    _buildDiscription(),
+                    _buildSizePart(),
+                    _buildColorPart(),
+                    _buildQuentityPart(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    _buildButtonPart(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

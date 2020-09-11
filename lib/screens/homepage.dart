@@ -4,6 +4,7 @@ import 'package:e_commerce/screens/about.dart';
 import 'package:e_commerce/screens/checkout.dart';
 
 import 'package:e_commerce/screens/contactus.dart';
+import 'package:e_commerce/screens/login.dart';
 
 import 'package:e_commerce/screens/profilescreen.dart';
 

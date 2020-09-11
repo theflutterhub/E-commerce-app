@@ -103,52 +103,70 @@ class _LoginState extends State<Login> {
   }
 
   Widget _buildAllPart() {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.4,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Text(
-            "Login",
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-          ),
-          MyTextFormField(
-            name: "Email",
-            controller: email,
-          ),
-          PasswordTextFormField(
-            obserText: obserText,
-            name: "Password",
-            controller: password,
-            onTap: () {
-              FocusScope.of(context).unfocus();
-              setState(() {
-                obserText = !obserText;
-              });
-            },
-          ),
-          isLoading == false
-              ? MyButton(
-                  onPressed: () {
-                    vaildation();
-                  },
-                  name: "Login",
-                )
-              : Center(
-                  child: CircularProgressIndicator(),
+    return Expanded(
+      flex: 3,
+      child: Container(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: <Widget>[
+                Text(
+                  "Login",
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
-          ChangeScreen(
-              name: "SignUp",
-              whichAccount: "I Have Not Account!",
-              onTap: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (ctx) => SignUp(),
-                  ),
-                );
-              }),
-        ],
+                SizedBox(
+                  height: 10,
+                ),
+                MyTextFormField(
+                  name: "Email",
+                  controller: email,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                PasswordTextFormField(
+                  obserText: obserText,
+                  name: "Password",
+                  controller: password,
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                    setState(() {
+                      obserText = !obserText;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                isLoading == false
+                    ? MyButton(
+                        onPressed: () {
+                          vaildation();
+                        },
+                        name: "Login",
+                      )
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                SizedBox(
+                  height: 10,
+                ),
+                ChangeScreen(
+                    name: "SignUp",
+                    whichAccount: "I Have Not Account!",
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (ctx) => SignUp(),
+                        ),
+                      );
+                    }),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

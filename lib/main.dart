@@ -2,6 +2,7 @@ import 'package:e_commerce/provider/category_provider.dart';
 import 'package:e_commerce/provider/product_provider.dart';
 import 'package:e_commerce/screens/homepage.dart';
 import 'package:e_commerce/screens/login.dart';
+import 'package:e_commerce/screens/welcomescreen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-           if (snapshot.hasData) {
+            if (snapshot.hasData) {
               return HomePage();
             } else {
               return Login();

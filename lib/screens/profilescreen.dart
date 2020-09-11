@@ -54,9 +54,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     } else {
       userDetailUpdate();
-      setState(() {
-        edit = false;
-      });
     }
   }
 
@@ -88,8 +85,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     userUid = myUser.uid;
   }
 
+  bool centerCircle = false;
   var imageMap;
   void userDetailUpdate() async {
+    setState(() {
+      centerCircle = true;
+    });
     _pickedImage != null
         ? imageMap = await _uploadImage(image: _pickedImage)
         : Container();
@@ -100,6 +101,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       "UserImage": imageMap,
       "UserAddress": address.text
     });
+    setState(() {
+      centerCircle = false;
+    });
+    setState(() {
+      edit = false;
+    });
   }
 
   Widget _buildSingleContainer(
@@ -107,11 +114,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       child: Container(
-        height: 50,
+        height: 55,
         padding: EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
           color: edit == true ? color : Colors.white,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: edit == false
+              ? BorderRadius.circular(30)
+              : BorderRadius.circular(0),
         ),
         width: double.infinity,
         child: Row(
@@ -146,7 +155,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isMale = false;
     }
     return Container(
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: double.infinity,
+      width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -209,7 +219,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildTextFormFliedPart() {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.3,
+      height: double.infinity,
+      width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -300,119 +311,136 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
         ],
       ),
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("User").snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            var myDoc = snapshot.data.docs;
-            myDoc.forEach((checkDocs) {
-              if (checkDocs.data()["UserId"] == userUid) {
-                userModel = UserModel(
-                  userEmail: checkDocs.data()["UserEmail"],
-                  userImage: checkDocs.data()["UserImage"],
-                  userAddress: checkDocs.data()["UserAddress"],
-                  userGender: checkDocs.data()["UserGender"],
-                  userName: checkDocs.data()["UserName"],
-                  userPhoneNumber: checkDocs.data()["UserNumber"],
-                );
-              }
-            });
-            return Container(
-              height: double.infinity,
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.1 + 50,
+      body: centerCircle == false
+          ? ListView(
+              children: [
+                StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("User")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      var myDoc = snapshot.data.docs;
+                      myDoc.forEach((checkDocs) {
+                        if (checkDocs.data()["UserId"] == userUid) {
+                          userModel = UserModel(
+                            userEmail: checkDocs.data()["UserEmail"],
+                            userImage: checkDocs.data()["UserImage"],
+                            userAddress: checkDocs.data()["UserAddress"],
+                            userGender: checkDocs.data()["UserGender"],
+                            userName: checkDocs.data()["UserName"],
+                            userPhoneNumber: checkDocs.data()["UserNumber"],
+                          );
+                        }
+                      });
+                      return Container(
+                        height: 603,
                         width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CircleAvatar(
-                                maxRadius: 65,
-                                backgroundImage: _pickedImage == null
-                                    ? userModel.userImage == null
-                                        ? AssetImage("images/userImage.png")
-                                        : NetworkImage(userModel.userImage)
-                                    : FileImage(_pickedImage)),
-                          ],
-                        ),
-                      ),
-                      edit == true
-                          ? Padding(
-                              padding: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).viewPadding.left +
-                                          220,
-                                  top: MediaQuery.of(context).viewPadding.left +
-                                      80),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    myDialogBox(context);
-                                  },
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: Color(0xff746bc9),
-                                    ),
+                            Stack(
+                              children: [
+                                Container(
+                                  height: 200,
+                                  width: double.infinity,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircleAvatar(
+                                          maxRadius: 65,
+                                          backgroundImage: _pickedImage == null
+                                              ? userModel.userImage == null
+                                                  ? AssetImage(
+                                                      "images/userImage.png")
+                                                  : NetworkImage(
+                                                      userModel.userImage)
+                                              : FileImage(_pickedImage)),
+                                    ],
                                   ),
                                 ),
+                                edit == true
+                                    ? Padding(
+                                        padding: EdgeInsets.only(
+                                            left: MediaQuery.of(context)
+                                                    .viewPadding
+                                                    .left +
+                                                220,
+                                            top: MediaQuery.of(context)
+                                                    .viewPadding
+                                                    .left +
+                                                110),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              myDialogBox(context);
+                                            },
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              child: Icon(
+                                                Icons.camera_alt,
+                                                color: Color(0xff746bc9),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
+                            ),
+                            Container(
+                              height: 350,
+                              width: double.infinity,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      child: edit == true
+                                          ? _buildTextFormFliedPart()
+                                          : _buildContainerPart(),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          child: edit == true
-                              ? _buildTextFormFliedPart()
-                              : _buildContainerPart(),
+                            ),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: edit == false
+                                    ? MyButton(
+                                        name: "Edit Profile",
+                                        onPressed: () {
+                                          setState(() {
+                                            edit = true;
+                                          });
+                                        },
+                                      )
+                                    : Container(),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20)),
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: edit == false
-                          ? MyButton(
-                              name: "Edit Profile",
-                              onPressed: () {
-                                setState(() {
-                                  edit = true;
-                                });
-                              },
-                            )
-                          : Container(),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }),
+                      );
+                    }),
+              ],
+            )
+          : Center(
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }

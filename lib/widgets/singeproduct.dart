@@ -16,32 +16,40 @@ class SingleProduct extends StatelessWidget {
         width: width * 0.2 * 2 + 10,
         child: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
+            Expanded(
+              flex: 3,
               child: Container(
-                height: height * 0.2,
-                width: 160,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(image),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Container(
+                  width: 160,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(image),
+                    ),
                   ),
                 ),
               ),
             ),
-            Text(
-              "\$ ${price.toString()}",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17,
-                  color: Color(0xff9b96d6)),
-            ),
-            Container(
-              child: Text(
-                name,
-                style: TextStyle(fontSize: 15),
+            Expanded(
+              child: Column(
+                children: [
+                  Text(
+                    "\$ ${price.toString()}",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                        color: Color(0xff9b96d6)),
+                  ),
+                  Container(
+                    child: Text(
+                      name,
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  )
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),

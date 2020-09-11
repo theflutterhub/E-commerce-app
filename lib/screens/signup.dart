@@ -139,102 +139,113 @@ class _SignUpState extends State<SignUp> {
   }
 
   Widget _buildAllTextFormField() {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            MyTextFormField(
-              name: "UserName",
-              controller: userName,
-            ),
-            MyTextFormField(
-              name: "Email",
-              controller: email,
-            ),
-            PasswordTextFormField(
-              obserText: obserText,
-              controller: password,
-              name: "Password",
-              onTap: () {
-                FocusScope.of(context).unfocus();
-                setState(() {
-                  obserText = !obserText;
-                });
-              },
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isMale = !isMale;
-                });
-              },
-              child: Container(
-                height: 60,
-                padding: EdgeInsets.only(left: 10),
-                width: double.infinity,
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.grey)),
-                child: Center(
-                  child: Row(
-                    children: [
-                      Text(
-                        isMale == true ? "Male" : "Female",
-                        style: TextStyle(color: Colors.black87, fontSize: 18),
-                      ),
-                    ],
-                  ),
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          MyTextFormField(
+            name: "UserName",
+            controller: userName,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          MyTextFormField(
+            name: "Email",
+            controller: email,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          PasswordTextFormField(
+            obserText: obserText,
+            controller: password,
+            name: "Password",
+            onTap: () {
+              FocusScope.of(context).unfocus();
+              setState(() {
+                obserText = !obserText;
+              });
+            },
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isMale = !isMale;
+              });
+            },
+            child: Container(
+              height: 60,
+              padding: EdgeInsets.only(left: 10),
+              width: double.infinity,
+              decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+              child: Center(
+                child: Row(
+                  children: [
+                    Text(
+                      isMale == true ? "Male" : "Female",
+                      style: TextStyle(color: Colors.black87, fontSize: 18),
+                    ),
+                  ],
                 ),
               ),
             ),
-            MyTextFormField(
-              name: "Phone Number",
-              controller: phoneNumber,
-            ),
-            MyTextFormField(
-              name: "Address",
-              controller: address,
-            ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          MyTextFormField(
+            name: "Phone Number",
+            controller: phoneNumber,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          MyTextFormField(
+            name: "Address",
+            controller: address,
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildBottomPart() {
-    return Expanded(
-      flex: 2,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            _buildAllTextFormField(),
-            isLoading == false
-                ? MyButton(
-                    name: "SignUp",
-                    onPressed: () {
-                      vaildation();
-                    },
-                  )
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ),
-            ChangeScreen(
-              name: "Login",
-              whichAccount: "I Have Already An Account!",
-              onTap: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (ctx) => Login(),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          _buildAllTextFormField(),
+          SizedBox(
+            height: 10,
+          ),
+          isLoading == false
+              ? MyButton(
+                  name: "SignUp",
+                  onPressed: () {
+                    vaildation();
+                  },
+                )
+              : Center(
+                  child: CircularProgressIndicator(),
+                ),
+          ChangeScreen(
+            name: "Login",
+            whichAccount: "I Have Already An Account!",
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (ctx) => Login(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -243,38 +254,29 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.9,
-            width: double.infinity,
+      body: ListView(
+        children: [
+          Container(
+            height: 200,
+         
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          "Register",
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+                Text(
+                  "Register",
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                _buildBottomPart(),
               ],
             ),
           ),
-        ),
+          Container(
+            height: 500,
+            child: _buildBottomPart(),
+          ),
+        ],
       ),
     );
   }

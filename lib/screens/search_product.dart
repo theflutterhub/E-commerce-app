@@ -35,7 +35,6 @@ class SearchProduct extends SearchDelegate<void> {
     List<Product> searchCategory = providerProvider.searchProductList(query);
 
     return GridView.count(
-    
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
@@ -61,7 +60,6 @@ class SearchProduct extends SearchDelegate<void> {
             .toList());
   }
 
-  void getProduct() {}
   @override
   Widget buildSuggestions(BuildContext context) {
     ProductProvider providerProvider = Provider.of<ProductProvider>(context);
@@ -72,10 +70,23 @@ class SearchProduct extends SearchDelegate<void> {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
         children: searchCategory
-            .map((e) => SingleProduct(
-                  image: e.image,
-                  name: e.name,
-                  price: e.price,
+            .map((e) => GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => DetailScreen(
+                          image: e.image,
+                          name: e.name,
+                          price: e.price,
+                        ),
+                      ),
+                    );
+                  },
+                  child: SingleProduct(
+                    image: e.image,
+                    name: e.name,
+                    price: e.price,
+                  ),
                 ))
             .toList());
   }
